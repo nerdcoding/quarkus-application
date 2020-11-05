@@ -38,9 +38,9 @@ installed `Maven` and `Graal VM`. Building the application inside of a container
 To create and jump into the Docer container for building the application use:
 ```
 docker run -it \
-    --name quarkus-application-build
-    -p 8080:8080
-    -v /<local-source-directory>/quarkus-application:/quarkus-application
+    --name quarkus-application-build \
+    -p 8080:8080 \
+    -v /<local-source-directory>/quarkus-application:/quarkus-application \
     quay.io/quarkus/centos-quarkus-maven:20.1.0-java11 bash -l
 ```
 
