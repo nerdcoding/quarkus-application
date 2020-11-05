@@ -1,0 +1,59 @@
+= Application build
+
+== Build & run application on JVM
+
+To application uses `JDK 11` and `Maven 3.6.3`. In order to run the application traditionally on an JVM a normal maven
+build could be executed with an `mvn clean package`. After a successful build the JAR file
+`quarkus-application-1.0-SNAPSHOT-runner.jar` was created. To start the application execute
+`java -jar target/quarkus-application-1.0-SNAPSHOT-runner.jar`.
+
+== Build & run application as native image
+
+=== Build application on your local machine
+
+We could use the *native image builder* (`native-image`) from `Graal VM` to create a standalone os-dependent application.
+During the build the application source code, all dependencies and used JDK libraries are searched, and an ahead-of-time
+compilation is done. The result is an image file which is _not_ platform independent and only runs on the host operating
+system. Meaning this application does not run on a JVM. To support JVM features such as garbage collection or thread
+handling, `Graal VM` uses something called `Substrate VM`. This a kind of embedded VM which is also compiled into the
+`native image`, and so part of the final application.
+
+To build the application as `native image` the maven profile `native` could be used: `mvn clean package -Pnative`. The
+compilation takes longer (because of the ahead-of-time compilation), but the container start is very very much faster
+and also the runtime memory allocation is lower. After a successfl build start the application with
+`./target/quarkus-application-1.0-SNAPSHOT-runner`.
+
+=== Build application inside of a Docker container
+
+When the build `native image` should be copied into a Docker image and run in a container of that image, the image needs
+to be based on the same operating system as the machine has used to build the application. Even when your local machine
+has an installed Linux distribution and the base image of the Docker container is another Linux distribution it could
+application build also inside of a Docker container.
+come to problems when the `native image` is executed. To prevent such problem it will be a good idea to run the
+
+The `quay.io/quarkus/centos-quarkus-maven:<version>` does exactly that. This is a Docker image based on `CentOS` with an
+installed `Maven` and `Graal VM`. Building the application inside of a container of that image and then copy the created
+`native-image` into another Docker image, should do the trick.
+
+To create and jump into the Docer container for building the application use:
+```
+docker run -it \
+    --name quarkus-application-build
+    -p 8080:8080
+    -v /<local-source-directory>/quarkus-application:/quarkus-application
+    quay.io/quarkus/centos-quarkus-maven:20.1.0-java11 bash -l
+```
+
+Then there the `native-image` could be created:
+```
+cd /quarkus-application/
+mvn clean package -Pnative
+```
+
+Finally, that image could be used to create a new Docker image, whose containers will run the application:
+```
+docker build -f src/main/docker/Dockerfile.native -t <docker-hub-name>/quarkus-application .
+```
+
+
+
