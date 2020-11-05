@@ -55,5 +55,18 @@ Finally, that image could be used to create a new Docker image, whose containers
 docker build -f src/main/docker/Dockerfile.native -t <docker-hub-name>/quarkus-application .
 ```
 
+= Extensions
+
+Quarkus encapsulates different functionality in extensions. By default the `cdi` and `resteasy` extension are installed.
+To list all available extensions:
+```
+mvn quarkus:list-extensions
+```
+
+And to add a new extension:
+```
+mvn quarkus:add-extensions -Dextensions=<extensions-name>
+```
+
 
 
