@@ -1,4 +1,4 @@
-package org.nerdcoding.sample.quarkus;
+package org.nerdcoding.sample.quarkus.controller;
 
 import org.jboss.logging.Logger;
 

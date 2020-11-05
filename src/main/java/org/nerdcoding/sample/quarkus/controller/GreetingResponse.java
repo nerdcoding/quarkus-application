@@ -1,4 +1,4 @@
-package org.nerdcoding.sample.quarkus;
+package org.nerdcoding.sample.quarkus.controller;
 
 public class GreetingResponse {
 

@@ -1,7 +1,6 @@
 package org.nerdcoding.sample.quarkus;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +13,9 @@ public class GreetingResourceTest {
     public void testHelloEndpoint() {
         given()
                 .when()
-                .get("/quarkus-application/v1/hello")
+                .get("/quarkus-application/v1/hello/message")
                 .then()
-                .statusCode(200)
-                .body(is("hello"));
+                .statusCode(200);
     }
 
 }
