@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quarkus-application-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: quarkus-application
+  template:
+    metadata:
+      name: quarkus-application
+      labels:
+        app: quarkus-application
+        env: prod
+    spec:
+      containers:
+        - name: quarkus-application
+          image: nerdcoding/quarkus-application
+          ports:
+            - containerPort: 8080
